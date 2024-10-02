@@ -129,6 +129,7 @@ function fn_onConnect_Handler(p_ws,p_req)
     const c_params = getHeaderParams(p_req.url);
     let v_loginTempKey;
 
+    console.log('WS Created from Party','fn_onConnect_Handler',null,c_params);
     if (global.m_logger) global.m_logger.Info('WS Created from Party','fn_onConnect_Handler',null,c_params);
 
     /**
@@ -148,6 +149,7 @@ function fn_onConnect_Handler(p_ws,p_req)
         const c_PARAM_LENGTH = 200;
         if (p_params == null )
         {
+            console.log('Party tried to login using no credentials','fn_validateKey',null,p_params);
             if (global.m_logger) global.m_logger.Warn('Party tried to login using no credentials','fn_validateKey',null,p_params);
             return false;
         }
@@ -162,6 +164,7 @@ function fn_onConnect_Handler(p_ws,p_req)
             if ((v_loginTempKey.fn_isAlphanumeric() !== true) || (v_loginTempKey.length > c_PARAM_LENGTH))
             {
                 c_WS.close();
+                console.log('Party tried to login using bad credentials','fn_validateKey',null,p_params);
                 if (global.m_logger) global.m_logger.Warn('Party tried to login using bad credentials','fn_validateKey',null,p_params);
                 return false;
             }
@@ -852,17 +855,18 @@ function fn_startChatServer ()
     const v_fs                = require('fs');
     const v_path              = require('path');
     const v_WebSocketServer   = require('ws').Server;
-    const c_https = require('https');
+    const c_https = require('http');
 
     
-    const options = {
-        key:  v_fs.readFileSync(v_path.join(__dirname, "./" + global.m_serverconfig.m_configuration.ssl_key_file.toString())),
-        cert: v_fs.readFileSync(v_path.join(__dirname, "./" + global.m_serverconfig.m_configuration.ssl_cert_file.toString()))
-		};
+    // const options = {
+    //     key:  v_fs.readFileSync(v_path.join(__dirname, "./" + global.m_serverconfig.m_configuration.ssl_key_file.toString())),
+    //     cert: v_fs.readFileSync(v_path.join(__dirname, "./" + global.m_serverconfig.m_configuration.ssl_cert_file.toString()))
+	// 	};
 
 
     
-    const wserver = c_https.createServer(options, new v_express());
+    // const wserver = c_https.createSecureServer(options, new v_express());
+    const wserver = c_https.createServer(new v_express());
     wserver.listen(global.m_serverconfig.m_configuration.server_port, global.m_serverconfig.m_configuration.server_ip); // start websocket server [secure]	
 
     const v_wss = new v_WebSocketServer(
