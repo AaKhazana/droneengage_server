@@ -765,8 +765,8 @@ function fn_startChatServer() {
     const v_app = v_express();
 
     const options = {
-        key: v_fs.readFileSync(v_path.join(__dirname, "./" + global.m_serverconfig.m_configuration.ssl_key_file.toString())),
-        cert: v_fs.readFileSync(v_path.join(__dirname, "./" + global.m_serverconfig.m_configuration.ssl_cert_file.toString()))
+        key: v_fs.readFileSync(v_path.join(__dirname, global.m_serverconfig.m_configuration.ssl_key_file.toString())),
+        cert: v_fs.readFileSync(v_path.join(__dirname, global.m_serverconfig.m_configuration.ssl_cert_file.toString()))
     };
 
     v_app.get('/', (req, res) => {
