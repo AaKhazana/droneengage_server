@@ -758,18 +758,21 @@ function fn_onConnect_Handler(p_ws, p_req) {
 function fn_startChatServer() {
     const v_express = require('express');
     const v_WebSocketServer = require('ws').Server;
-    const c_https = require('http');
+    const c_https = require('https');
+    const v_path = require('path');
+
     const v_app = v_express();
+
+    const options = {
+        key: v_fs.readFileSync(v_path.join(__dirname, "./" + global.m_serverconfig.m_configuration.ssl_key_file.toString())),
+        cert: v_fs.readFileSync(v_path.join(__dirname, "./" + global.m_serverconfig.m_configuration.ssl_cert_file.toString()))
+    };
 
     v_app.get('/', (req, res) => {
         res.send("Chat Server: Hello World!");
     });
 
-    const wserver = c_https.createServer(v_app);
-    // console.log(global.m_serverconfig.m_configuration.server_port);
-    // v_app.listen(global.m_serverconfig.m_configuration.server_port, () => {
-    //     console.log("Started Server on localhost:9966");
-    // })
+    const wserver = c_https.createServer(options, new v_express());
     wserver.listen(global.m_serverconfig.m_configuration.server_port, global.m_serverconfig.m_configuration.server_ip); // start websocket server [secure]	
 
     const v_wss = new v_WebSocketServer(

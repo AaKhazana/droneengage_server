@@ -75,7 +75,7 @@ function fn_startWebSocketListener (p_url)
 function fn_startServer ()
 {
     Me = this;
-    const c_url= "ws://" + global.m_serverconfig.m_configuration.s2s_ws_target_ip + ":" + global.m_serverconfig.m_configuration.s2s_ws_target_port;
+    const c_url= "wss://" + global.m_serverconfig.m_configuration.s2s_ws_target_ip + ":" + global.m_serverconfig.m_configuration.s2s_ws_target_port;
 
     console.log (global.Colors.Success + "[OK] Comm Server Manager Client connecting to " + c_url + " to reach AndruavAuth" + global.Colors.Reset);
 
